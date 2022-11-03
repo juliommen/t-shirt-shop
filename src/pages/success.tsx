@@ -2,7 +2,6 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import Stripe from "stripe";
 import { ImageContainer } from "../styles/pages/success";
 import { SuccessContainer } from "../styles/pages/success";
@@ -29,7 +28,7 @@ export default function Success({customerName, imageUrl, productName} : SuccessP
         </ImageContainer>
         <p>Uhuuu! <strong>{customerName}</strong>, sua <strong>Camiseta {productName}</strong> já está a caminho da sua casa</p>
         <Link href={"/"}>
-          Voltar ao catálogo.
+          Voltar ao catálogo
         </Link>
       </SuccessContainer>
     </>

@@ -6,7 +6,7 @@ export const SuccessContainer = styled('main', {
 	alignItems:'center',
 	justifyContent:'center',
 	margin:'0 auto',
-	height:400,
+	height:580,
 
 	h1:{
 		fontSize:'$xxl',
@@ -46,10 +46,10 @@ export const ImageContainer = styled('div', {
   display:'flex',
   alignItems:'center',
   justifyContent:'center',
-  marginTop:'3rem',
+  marginTop:'2rem',
 
   img:{
-	objectFit:'cover',
+		objectFit:'cover',
   },
 
 })

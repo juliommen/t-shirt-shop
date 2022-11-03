@@ -5,7 +5,7 @@ export const HomeContainer = styled('main', {
   width:'100%',
   maxWidth:'calc(50vw + 590px)',
   marginLeft:'auto',
-  minHeight:656
+  minHeight:580
 
 })
 
@@ -18,6 +18,7 @@ export const Product = styled('a', {
   alignItems:'center',
   justifyContent:'center',
   overflow:'hidden',
+  minWidth:400,
 
   img: {
     objectFit: 'cover',
