@@ -1,0 +1,166 @@
+Com o NEXT, fazem-se páginas SSR (server side rendering) com o React, isto é, aplicações que não rodam o 
+Javascript no browser em runtime, mas num servidor Node entre o client e o banco de dados.
+
+Com o NEXT, também é possível usar a abordagem SSG (static site generation), na qual define-se um intervalo
+de tempo durante o qual todo o conteúdo da aplicação (inclusive dados dinâmicos obtidos via API) fica
+salvo em cache (CDN) e servido de forma estática. 
+Assim, os clientes não consomem em tempo real nada da aplição, a não ser aquele que fizer o primeiro acesso
+após o intervalo de tempo.
+
+1 - npx create-next-app@latest
+2 - npm i typescript @types/node @types/react
+3 - Criado pasta src e colocado a pasta pages dentro dela
+4 - Apagado uma série de arquivos
+
+---
+Criando um arquivo em pages (como 'success.tsx') faz com que o caminho 'base_url/success '
+renderize o arquivo 'success.tsx'.
+
+Criando uma pasta dentro de 'pages', como 'success', faz com que o caminho 'base_url/success'
+renderize um arquivo 'index.tsx', se houver, dentro da pasta. 
+
+Para chamar a rota 'base_url/success/1', e renderizar um arquivo captando o parâmetro 1 passado,
+cria-se um arquivo dentro da pasta 'success' com um nome qualquer entre colchetes, como '[id].tsx'.
+---
+Para importar fontes no projeto, é preciso criar o '_document.tsx'.
+
+Toda vez que há alteração no '_document', é preciso rodar de novo o 'npm run dev'. 
+Havendo problemas, deletar pasta '.next' e rodar denovo.
+Importante deixar o '_document' sempre o mais simples possível. Sem maiores importações.
+---
+Foi apresentada a biblio 'stitches', que substitui a styled-components e traz vantagens.
+Criada uma pasta 'styles' com arquivo 'index.ts', onde são exportados os métodos principais da biblio,
+além de definidas as cores e tamanho de fontes padrão.
+
+Por padrão, bibliotecas de CSS aplicam a estilização usando a execução de Javascript do browser,
+ou seja, os estilos acabam sendo renderizados em runtime (como se fosse uma SPA).
+Como o Next usa a arquitetura SSR, os componentes todos serão mostrados em tela -- pois o Javascript
+é rodado num Server Node, entre o client e o servidor de dados -- mas não receberão o estilo, se o JS 
+do browser estiver desabilitado. 
+Para contornar, deve-se adicionar a seguinte linha ao Head do '_document': 
+  
+  <style id="stitches" dangerouslySetInnerHTML={{__html: getCssText()}}></style>
+
+Criado arquivo 'global.ts' na pasta 'styles' com as estlização globais usando 'stitches'.
+Para usar no app: adicionar 'globalStyles()' em '_app'. 
+---
+O '_app' é um wrapper para TODAS as páginas da aplicação. Então, é um bom lugar
+para colocar o elemento de cabeçalho das páginas.
+---
+O componente "Image" do next optimiza a renderização de imagens, diminuindo o tamanho
+e até convertendo o tipo do arquivo, tornando a aplicação muito mais performática.
+---
+Usado efeito interessante no hover do produto, com footer vindo de baixo.
+---
+Usada a biblioteca 'keen-slider' para o carrossel de produtos. 
+Também padece do problema de renderização somente no cliente.
+Essa biblioteca 'se perde' se houver gaps, padding e margins entre os elementos do carrossel.
+Para isso, é preciso usar a propriedade 'spacing' do hook dela.
+---
+Chamadas a API no carregamento de páginas também padecem do 'problema' de renderização somente no cliente, 
+se feitas normalmente dentro do elemento antes do return.
+Para contornar se necessário, pode-se usar um 'portal' no arquivo da página, fora do elemento, 
+usando um método próprio do Next para execução de código no servidor ao abrir a página:
+    
+    export const getServerSideProps = () => {
+      fetch...
+      return {
+        props: {}
+      }
+    }
+
+Detalhe: 
+    - Tal 'portal' só pode ser usado nas páginas/elementos em 'pages'.
+    - O objeto retornado pelo 'portal' será acessado via props no elemento.
+    - Vale notar que a página como um todo não será carregada enquanto as funções no portal
+	  não forem resolvidas, o que pode ser um comportamento não desejado.
+    - Assim, esse recurso só é usado para informações cruciais que precisam estar em tela,
+      ou chamadas a API sensíveis, às quais o usuário não deve ter acesso.
+---
+Para habilitar a renderização de imagens de links externos, deve ser adicionado
+isso ao 'next.config.file' (no caso, um exemplo de links de imagem de produtos do Stripe):
+    
+    images: {
+      domains: [
+        files.stripe.com
+      ]
+    }
+
+Pode-se usar a biblio 'blurhash' junto ao elemento 'placeholder' do Next para um efeito legal
+antes do carregamento das imagens.
+Assim também pode-se usar Skeleton Screens.
+---
+Para fazer uso do cache (SSG pattern), em vez do 'getServerSideProps' usa-se o 'getStaticProps', retornando
+junto às props um parâmetro 'revalidate'
+	
+  export const getStaticProps = () => {
+      fetch...
+      return {
+        props: {},
+		    revalidade: 60 * 60 * 2 ----> segundos de intervalo para atualização dos dados no cache
+      }
+    }
+
+Em desenvolvimento isso não funciona, só em produção.
+
+Dando um 'npm run build' o Next irá buscar esse método em todas as páginas com conteúdo estatíco a ser
+buscado e os guardará em cache. Para rodar o build: 'npm run start'. Ao abrir a aplicação, já se vê 
+a velocidade de renderização, pois todos os dados estarão já em cache.
+
+Desvantagem: 
+	No método 'getServerSideProps', é possível pegar informações da requisição do cliente (req, res, query). 
+	No método 'getStaticProps', isso não é possível. Assim, páginas que exibem conteúdo dinâmico, 
+  que dependem do usuário, não podem fazer uso do método.
+---
+Pode-se utilizar um 'href' diretamente nas âncoras para navegar entre páginas, 
+contudo isso é ruim para a performance, pois o Next irá carregar tudo de novo (fontes, estilos etc)
+a cada vez que se clicar em um desses links.
+Para melhor performance, usa-se o componente 'Link' do Next. 
+Assim, o Next irá se comportar como uma SPA, e não carregará coisas já carregadas.
+----
+O método 'getStaticPaths' é necessário quando usa-se SSG em página dinâmica como a '[id]',
+pois no build, ou na atualização de dados, o Next não sabe o que usar como parâmetros possíveis.
+Usando 'fallback: true' no método, o Next rodará o método 'getStaticProps' em tempo real (SSR), se a 
+página for acessada com parâmetro na URL que não estiver listado em 'paths'. 
+Quando há muitos parâmetros possíveis, a prática comum é deixar listado só os mais acessados/importantes.
+Nota:
+	- É possível caputar o estado de fallback no elemento com 'const {isFallback} = useRouter()'.
+	Assim, é possível renderizar uma Skeleton Screen, ou algum display de loading antes da página carregar.
+	- Com "fallback: 'blocking'" a renderização da tela toda é bloqueada até haver algo para mostrar.
+----
+Por padrão, o Next faz um 'prefetch' de dados quando são abertas páginas onde há 'href' nos componentes Link.
+Para desabilitar, adicionar 'prefetch={false}' aos Links. isso faz com que o 'prefetch' aconteça só no 'hover'.
+---
+Como o Next baseia-se num servidor Node, é possível e em alguma ocasições até preferível fazer uso desse backend
+via disponibilização de rotas para a aplicação (útil para autenticação, por exemplo).
+Para isso, criar pasta 'api' dentro de 'pages'.
+---
+É preciso fazer uma checkout session no Stripe para finalização da compra de itens selecionados.
+---
+Como devem-se fazer redirecionamento para outras páginas:
+  - Se rota externa: 'window.location.href('https:...')'
+  - Se rota interna: 
+    1) Definir 'const router = useRouter()'
+    2) Direcionar com 'router.push('/rota') 
+---
+Caso o usuário acesse alguma rota sem os parâmetros necessários para rodar sem erro o 'getServerSideProps', 
+é preciso fazer um redirecionamento dentro do método, como abaixo:
+    
+    if (!query.id) {
+      return {
+        redirect: {
+          destination:'/',
+          permanent:false,
+        }
+      }
+    }
+---
+Na API da Stripe, geralmente é preciso passar o parâmetro opcional 'expand' para trazer mais informações 
+de dados que são entidades próprias no banco de dados deles, como preços e produtos, 
+que virão normalmente só com o id em solicitações de dados de entidades relacionadas.
+---
+O elemento Head do 'next/head' pode ser utilizado dentro dos elementos/páginas para 
+transportar qualquer tag dentro dele (como <title></title> <meta></meta>) para dentro de '_document'
+
+A tag dentro de Head: '<meta name="robots" content="noindex" />' serve para os robôs 
+não indexarem a página nos mecanismos de busca.
