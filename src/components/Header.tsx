@@ -15,7 +15,6 @@ export function Header(){
     if (products.length === 0) {
       handleCloseCart()
     }
-
   }, [products])
 
   const isCartEmpty = products.length === 0

@@ -3,7 +3,7 @@ import { X } from 'phosphor-react';
 import { CartContainer, ImageCartContainer, TotalContainer } from './CartStyle';
 import Image from 'next/image'
 import { CartContext, ProductType } from './../context/CartContext';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import axios from 'axios'
 
 export function Cart({closeCart, show}){
@@ -16,19 +16,18 @@ export function Cart({closeCart, show}){
     removeProduct(product)
   }
 
-  	// const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
-	// async function handleBuyProduct() {
-	// 	setIsCreatingCheckoutSession(true)
-	// 	try {
-	// 		const response = await axios.post("/api/checkout", {props.})
-	// 		const {checkoutUrl} = response.data
-	// 		window.location.href = checkoutUrl
-	// 	} catch (error) {
-	// 		// Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
-	// 		setIsCreatingCheckoutSession(false)
-	// 		alert('Falha ao redirecionar ao checkout')
-	// 	}
-	// }
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+	async function handleBuyProduct() {
+		setIsCreatingCheckoutSession(true)
+		try {
+			const response = await axios.post("/api/checkout", {products})
+			const {checkoutUrl} = response.data
+			window.location.href = checkoutUrl
+		} catch (error) {
+			setIsCreatingCheckoutSession(false)
+			alert('Falha ao redirecionar ao checkout')
+		}
+	}
 
   return (
     <CartContainer isOpen={show}>
@@ -61,7 +60,7 @@ export function Cart({closeCart, show}){
           <h1>Valor total</h1>
           <h2>{totalAmountFormatted}</h2>
         </div>
-        <button>Finalizar Compra</button>
+        <button disabled={isCreatingCheckoutSession} onClick={handleBuyProduct}>Finalizar Compra</button>
       </TotalContainer>
     </CartContainer>
   )

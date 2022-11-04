@@ -164,3 +164,5 @@ transportar qualquer tag dentro dele (como <title></title> <meta></meta>) para d
 
 A tag dentro de Head: '<meta name="robots" content="noindex" />' serve para os robôs 
 não indexarem a página nos mecanismos de busca.
+---
+Ferramentas de observabilidade (Datadog / Sentry) usadas junto ao 'catch(e)' do bloco 'try'.

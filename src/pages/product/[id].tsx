@@ -8,7 +8,8 @@ import Head from 'next/head';
 import { CartContext, ProductType } from '../../context/CartContext';
 
 export default function Product(props: ProductType){
-	const {addProduct} = useContext(CartContext)
+
+	const {addProduct, products} = useContext(CartContext)
 	
 	function handleaddProductToCart(product: ProductType){
     addProduct(product)
@@ -27,7 +28,10 @@ export default function Product(props: ProductType){
 					<h1>{props.name}</h1>
 					<span>{props.price}</span>
 					<p>{props.description}</p>
-					<button onClick={() => handleaddProductToCart(props)}>Colocar na sacola</button>
+					{
+						!products.find(item => item.id === props.id) && 
+						<button onClick={() => handleaddProductToCart(props)}>Colocar na sacola</button>
+					}
 				</ProductDetails>
 			</ProductContainer>
 		</>

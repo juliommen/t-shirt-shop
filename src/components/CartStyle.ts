@@ -53,7 +53,7 @@ export const CartContainer = styled('div', {
   '&>div':{
     overflow:'auto',
     width:'100%',
-    height:'100%'
+    height:'100%',
   },
 
   'div div':{ 
@@ -91,8 +91,8 @@ export const CartContainer = styled('div', {
         fontWeight:'bold',
         lineHeight:'1.6',
         fontSize:'1rem',
-        marginTop:'auto',
-        cursor:'pointer'
+        marginTop:'0.5rem',
+        cursor:'pointer',
       },
     
       '&>button:hover':{
@@ -115,7 +115,7 @@ export const CartContainer = styled('div', {
 
 })
 
-export const ImageCartContainer = styled('div', {
+export const ImageCartContainer = styled('main', {
   width:'100%',
   maxWidth:90,
   minHeight:90,

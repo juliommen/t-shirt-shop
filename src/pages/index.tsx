@@ -40,9 +40,11 @@ export default function Home({prods} : HomeProps) {
           <CaretRight size={48}/>
         </aside> */}
         {prods.map(prod => 
-            <Product key={prod.id} className='keen-slider__slide'  >
-              <Link key={prod.id} href={`/product/${prod.id}`} prefetch={false}>
-                <Image src={prod.imageUrl} alt="" width={520} height={480}/>
+            <Product  key={prod.id}  className='keen-slider__slide'  >
+              <Link href={`/product/${prod.id}`} prefetch={false} legacyBehavior>
+                <a>
+                  <Image src={prod.imageUrl} alt="" width={520} height={480}/>
+                </a>
               </Link>
               <footer>
                 <div>
@@ -54,7 +56,7 @@ export default function Home({prods} : HomeProps) {
                   <Handbag size={26} onClick={() => handleaddProductToCart(prod)}/>
                 }
               </footer>
-            </Product>
+            </Product>    
       )}
       </HomeContainer>
     </>
@@ -71,7 +73,8 @@ export const getStaticProps: GetStaticProps = async () => {
       name: prod.name,
       imageUrl: prod.images[0],
       description: prod.description,
-      price: (price.unit_amount / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+      price: (price.unit_amount / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+      priceId: price.id
     }
   })
   return {
