@@ -7,21 +7,16 @@ import { GetStaticProps } from 'next';
 import Stripe from 'stripe'
 import Link from 'next/link';
 import Head from 'next/head';
-
-export interface ProductType {
-  id: string;
-  name: string;
-  imageUrl: string;
-  description: string,
-  price: string,
-  priceId: string
-}
+import { CaretRight, Handbag } from 'phosphor-react';
+import { CartContext, ProductType } from './../context/CartContext';
+import { useContext } from 'react';
 
 interface HomeProps {
   products : ProductType[]
 }
 
 export default function Home({products} : HomeProps) {
+
   const [sliderRef] = useKeenSlider({
     rubberband:false,
     slides: ({
@@ -30,25 +25,39 @@ export default function Home({products} : HomeProps) {
     }),
   })
 
+  const {addProduct} = useContext(CartContext)
+
+  function handleaddProductToCart(product: ProductType){
+    addProduct(product)
+  }
+
   return (
     <>
       <Head>
         <title>Home | Ofertei Shop</title>
       </Head>
+      
       <HomeContainer ref={sliderRef} className='keen-slider'>
+        {/* <aside>
+          <CaretRight size={48}/>
+        </aside> */}
         
         {products.map(prod => 
-          <Link key={prod.id} href={`/product/${prod.id}`} prefetch={false}>
-            <Product className='keen-slider__slide'  >
-              <Image src={prod.imageUrl} alt="" width={520} height={480}/>
+
+            <Product key={prod.id} className='keen-slider__slide'  >
+              <Link key={prod.id} href={`/product/${prod.id}`} prefetch={false}>
+                <Image src={prod.imageUrl} alt="" width={520} height={480}/>
+              </Link>
               <footer>
-                <strong>{prod.name}</strong>
-                <span>{prod.price.toString()}</span>
+                <div>
+                  <strong>{prod.name}</strong>
+                  <span>{prod.price.toString()}</span>
+                </div>
+                <Handbag size={26} onClick={() => handleaddProductToCart(prod)}/>
               </footer>
             </Product>
-          </Link>
+     
       )}
-      
       </HomeContainer>
     </>
   )

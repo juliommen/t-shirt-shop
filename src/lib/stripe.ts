@@ -7,5 +7,6 @@ export const stripe = new Stripe(
     appInfo:{
       name:'T-Shirt Shop'
     },
+    maxNetworkRetries:3
   }
 )

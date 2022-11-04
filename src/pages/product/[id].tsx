@@ -3,41 +3,48 @@ import { ImageContainer, ProductContainer, ProductDetails } from './../../styles
 import { stripe } from './../../lib/stripe';
 import Stripe from 'stripe';
 import Image from 'next/image';
-import { ProductType } from './../index';
 import axios from 'axios'
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Head from 'next/head';
+import { CartContext, ProductType } from '../../context/CartContext';
 
-export default function Product({price,name,description,imageUrl, priceId}: ProductType){
-	const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+export default function Product(props: ProductType){
+	
 
-	async function handleBuyProduct() {
-		setIsCreatingCheckoutSession(true)
-		try {
-			const response = await axios.post("/api/checkout", {priceId})
-			const {checkoutUrl} = response.data
-			window.location.href = checkoutUrl
-		} catch (error) {
-			// Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
-			setIsCreatingCheckoutSession(false)
-			alert('Falha ao redirecionar ao checkout')
-		}
-	}
+	const {addProduct} = useContext(CartContext)
+	
+	function handleaddProductToCart(product: ProductType){
+    addProduct(product)
+  }
+
+	// const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+	// async function handleBuyProduct() {
+	// 	setIsCreatingCheckoutSession(true)
+	// 	try {
+	// 		const response = await axios.post("/api/checkout", {props.})
+	// 		const {checkoutUrl} = response.data
+	// 		window.location.href = checkoutUrl
+	// 	} catch (error) {
+	// 		// Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
+	// 		setIsCreatingCheckoutSession(false)
+	// 		alert('Falha ao redirecionar ao checkout')
+	// 	}
+	// }
 
   return (
 		<>
       <Head>
-          <title>{name} | Ofertei Shop</title>
+          <title>{props.name} | Ofertei Shop</title>
       </Head>
     	<ProductContainer>
 				<ImageContainer>
-				<Image src={imageUrl} alt="" width={520} height={480}/>
+				<Image src={props.imageUrl} alt="" width={520} height={480}/>
 				</ImageContainer>
 				<ProductDetails>
-					<h1>{name}</h1>
-					<span>{price}</span>
-					<p>{description}</p>
-					<button disabled={isCreatingCheckoutSession} onClick={handleBuyProduct}>Comprar agora</button>
+					<h1>{props.name}</h1>
+					<span>{props.price}</span>
+					<p>{props.description}</p>
+					<button onClick={() => handleaddProductToCart(props)}>Colocar na sacola</button>
 				</ProductDetails>
 			</ProductContainer>
 		</>
@@ -47,7 +54,10 @@ export default function Product({price,name,description,imageUrl, priceId}: Prod
 export const getStaticPaths: GetStaticPaths = async () => {
 	return {
 		paths: [
-			{ params: {id:'prod_Mgz2aZZrcjtBRn' } }
+			{ params: {id:'prod_Mgz2aZZrcjtBRn' } },
+			{ params: {id:'prod_Mgz20JSNzqT3Ka' } },
+			{ params: {id:'prod_MgypQlzu2RJMGs' } },
+			{ params: {id:'prod_Mgyp5vZQMgzVDQ' } },
 		],
 		fallback: true
 	}
