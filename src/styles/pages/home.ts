@@ -29,7 +29,7 @@ export const Product = styled('a', {
     bottom:'0.25rem',
     left:'0.25rem',
     right:'0.25rem',
-    padding:'2rem',
+    padding:'1.5rem',
     borderRadius:6,
     display:'flex',
     alignItems:'center',
