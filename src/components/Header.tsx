@@ -7,7 +7,7 @@ import { CartButton, HeaderContainer } from './HeaderStyle';
 import { CartContext } from '../context/CartContext';
 
 export function Header(){
-  const [cartOpen, setCartOpen] = useState(false)
+  const [openCart, setOpenCart] = useState(false)
 
   const {products} = useContext(CartContext)
 
@@ -22,12 +22,12 @@ export function Header(){
   
   function handleOpenCart(){
     if (products.length > 0){
-      setCartOpen(true)
+      setOpenCart(true)
     }
   }
 
   function handleCloseCart(){
-    setCartOpen(false)
+    setOpenCart(false)
   }
 
   return (
@@ -40,7 +40,7 @@ export function Header(){
         <Handbag size={26}/>
         {!isCartEmpty && <p>{products.length}</p>}
       </CartButton>
-      {cartOpen && <Cart closeCart={handleCloseCart}/>}
+      {openCart ? <Cart show={'yes'} closeCart={handleCloseCart}/> : <Cart show={'no'} closeCart={handleCloseCart}/>}
     </HeaderContainer>
   )
 }

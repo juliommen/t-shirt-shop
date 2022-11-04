@@ -3,33 +3,16 @@ import { ImageContainer, ProductContainer, ProductDetails } from './../../styles
 import { stripe } from './../../lib/stripe';
 import Stripe from 'stripe';
 import Image from 'next/image';
-import axios from 'axios'
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import Head from 'next/head';
 import { CartContext, ProductType } from '../../context/CartContext';
 
 export default function Product(props: ProductType){
-	
-
 	const {addProduct} = useContext(CartContext)
 	
 	function handleaddProductToCart(product: ProductType){
     addProduct(product)
   }
-
-	// const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
-	// async function handleBuyProduct() {
-	// 	setIsCreatingCheckoutSession(true)
-	// 	try {
-	// 		const response = await axios.post("/api/checkout", {props.})
-	// 		const {checkoutUrl} = response.data
-	// 		window.location.href = checkoutUrl
-	// 	} catch (error) {
-	// 		// Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
-	// 		setIsCreatingCheckoutSession(false)
-	// 		alert('Falha ao redirecionar ao checkout')
-	// 	}
-	// }
 
   return (
 		<>
