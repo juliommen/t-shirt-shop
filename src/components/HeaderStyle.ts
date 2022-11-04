@@ -12,7 +12,8 @@ export const HeaderContainer = styled('header',{
   main: {
     display:'flex',
     alignItems:'center',
-    gap:'0.5rem'
+    gap:'0.5rem',
+    cursor:'pointer'
   },
   
 

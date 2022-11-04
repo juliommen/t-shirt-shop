@@ -5,6 +5,7 @@ import {Cart} from "../components/Cart";
 import { useContext, useEffect, useState } from "react";
 import { CartButton, HeaderContainer } from './HeaderStyle';
 import { CartContext } from '../context/CartContext';
+import Link from 'next/link';
 
 export function Header(){
   const [openCart, setOpenCart] = useState(false)
@@ -31,10 +32,12 @@ export function Header(){
 
   return (
     <HeaderContainer>
-      <main>
-        <Image src={logoImg} width={100} height={100} alt="" />
-        <h1>Ofertei <br/><span>T-Shirt shop</span></h1>
-      </main>
+      <Link href={'/'} prefetch={false}>
+        <main>
+          <Image src={logoImg} width={100} height={100} alt="" />
+          <h1>Ofertei <br/><span>T-Shirt shop</span></h1>
+        </main>
+      </Link>
       <CartButton onClick={handleOpenCart} iconColor={!isCartEmpty ? 'hasItem' : 'empty'} disabled={isCartEmpty}>
         <Handbag size={26}/>
         {!isCartEmpty && <p>{products.length}</p>}

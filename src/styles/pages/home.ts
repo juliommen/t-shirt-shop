@@ -7,6 +7,7 @@ export const HomeContainer = styled('main', {
   marginLeft:'auto',
   maxWidth:'calc(50vw + 590px)',
   minHeight:580,
+  overflow:'hidden',
 
   aside: {
     background:'linear-gradient(90deg, rgba(18,18,20,0) 0%, rgba(18,18,20,0.75) 100%)',
@@ -27,9 +28,7 @@ export const HomeContainer = styled('main', {
 })
 
 export const Product = styled('main', {
-  background:'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
   borderRadius:8,
-  
   position:'relative',
   display:'flex',
   alignItems:'center',
@@ -37,6 +36,13 @@ export const Product = styled('main', {
   overflow:'hidden',
   minWidth:600,
   padding:'0 4rem',
+
+  variants:{
+    loadingState:{
+      loading:{background:'$gray800', marginRight:40},
+      loaded:{background:'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)'},
+    }
+  },
 
   img: {
     objectFit: 'cover',
