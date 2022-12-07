@@ -2,7 +2,7 @@
 import { X } from 'phosphor-react';
 import { CartContainer, ImageCartContainer, TotalContainer } from './CartStyle';
 import Image from 'next/image'
-import { CartContext, ProductType } from './../context/CartContext';
+import { CartContext, ProductType } from '../../context/CartContext';
 import { useContext, useState } from 'react';
 import axios from 'axios'
 

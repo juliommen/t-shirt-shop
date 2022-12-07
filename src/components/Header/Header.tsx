@@ -1,10 +1,10 @@
-import logoImg from '../assets/icon.png'
+import logoImg from '../../assets/icon.png'
 import Image from "next/image";
 import { Handbag } from "phosphor-react";
-import {Cart} from "../components/Cart";
+import {Cart} from "../Cart/Cart";
 import { useContext, useEffect, useState } from "react";
 import { CartButton, HeaderContainer } from './HeaderStyle';
-import { CartContext } from '../context/CartContext';
+import { CartContext } from '../../context/CartContext';
 import Link from 'next/link';
 
 export function Header(){

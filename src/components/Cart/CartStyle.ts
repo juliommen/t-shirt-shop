@@ -1,4 +1,4 @@
-import { styled } from "../styles";
+import { styled } from "../../styles";
 
 export const CartContainer = styled('div', {
   position:'fixed',
