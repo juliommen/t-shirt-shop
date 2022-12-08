@@ -34,7 +34,7 @@ export function Header(){
     <HeaderContainer>
       <Link href={'/'} prefetch={false}>
         <main>
-          <Image src={logoImg} width={100} height={100} alt="" />
+          <Image src={logoImg} width={100} height={100} alt=""/>
           <h1>Ofertei <br/><span>T-Shirt shop</span></h1>
         </main>
       </Link>
